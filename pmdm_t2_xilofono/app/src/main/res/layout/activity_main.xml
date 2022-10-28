@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:backgroundTint="#000000"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_weight="1"
+        android:background="#000000"
+        app:srcCompat="@drawable/xilofono" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="monospace"
+        android:textColor="@color/white"
+        android:text="@string/headerApp"
+        tools:text="@string/headerApp"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/b1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/red"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="DO"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b2"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/orange"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="RE"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b3"
+        android:layout_width="329dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/yellow"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="MI"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b4"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/green"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="FA"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b5"
+        android:layout_width="251dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/blue"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="SOL"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b6"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/blue"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="LA"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/b7"
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/purple"
+        android:onClick="pulsaBoton"
+        android:rotation="0"
+        android:text="SI"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:strokeColor="#807E7E"
+        app:strokeWidth="2dp" />
+
+</LinearLayout>

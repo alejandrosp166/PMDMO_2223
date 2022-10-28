@@ -1,0 +1,49 @@
+<resources>
+
+    <string name="bienvenida_juego">¡ BIENVENIDO !</string>
+    <string name="app_name">TresEnRaya ASP</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="puntuacion_jugador">Jugador:</string>
+    <string name="puntuacion_maquina">Maquina:</string>
+    <string name="puntuacion_partidas">Partidas:</string>
+
+    <string name="primero_jugador">Tu primero</string>
+    <string name="maquina_primero">Android irá primero</string>
+
+    <string name="turno_jugador">Tu turno</string>
+    <string name="turno_maquina">Turno Android</string>
+
+    <string name="result_human_wins">¡ GANASTE !</string>
+    <string name="you_win">¡ HAS GANADO !</string>
+    <string name="result_computer_wins">¡ ANDROID GANA !</string>
+    <string name="you_lose">¡ HAS PERDIDO !</string>
+    <string name="result_tie">¡ EMPATE !</string>
+    <string name="you_tie">¡ HAS EMPATADO CON ANDROID !</string>
+    <string name="animar_jugador">Intenta otra partida</string>
+    <string name="dificultad_seleccion">Selecciona el nivel de dificultad</string>
+    <string name="dificultad_facil">Fácil</string>
+    <string name="dificultad_media">Medio</string>
+    <string name="dificultad_experto">Experto</string>
+    <string name="establecida_facil">La dificultad se estableció en fácil</string>
+    <string name="establecida_medio">La dificultad se estableció en medio</string>
+
+    <string name="salir">¿Seguro que quieres salir de la app?</string>
+    <string name="yes">si</string>
+    <string name="no">no</string>
+
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+
+    <string name="restart_game">Reiniciar Partida</string>
+    <string name="restart_all">Nuevo Juego</string>
+    <string name="continue_game">Continuar</string>
+
+</resources>

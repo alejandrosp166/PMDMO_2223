@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyWrather APP Alejandro Seco</string>
+    <string name="max">Máximas</string>
+    <string name="min">Mínimas</string>
+    <string name="est">Estado</string>
+    <string name="cabeceraTiempo">Temperaturas</string>
+</resources>

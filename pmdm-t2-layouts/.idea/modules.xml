@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pmdm-t2-layouts.iml" filepath="$PROJECT_DIR$/.idea/modules/pmdm-t2-layouts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/pmdm-t2-layouts.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:theme="@style/Theme.AppCompat" >
+
+    <TableLayout
+        android:id="@+id/buttons"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:stretchColumns="*"
+        android:visibility="gone">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/one"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/one"
+                android:onClick="onClick"
+                android:text="@string/one"
+                android:textSize="50dp" />
+
+
+            <Button
+                android:id="@+id/two"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/two"
+                android:onClick="onClick"
+                android:text="@string/two"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/three"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/three"
+                android:onClick="onClick"
+                android:text="@string/three"
+                android:textSize="50dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/four"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/four"
+                android:onClick="onClick"
+                android:text="@string/four"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/five"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/five"
+                android:onClick="onClick"
+                android:text="@string/five"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/six"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/six"
+                android:onClick="onClick"
+                android:text="@string/six"
+                android:textSize="50dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/seven"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/seven"
+                android:onClick="onClick"
+                android:text="@string/seven"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/eight"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/eight"
+                android:onClick="onClick"
+                android:text="@string/eight"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/nine"
+                android:layout_width="75dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/nine"
+                android:onClick="onClick"
+                android:text="@string/nine"
+                android:textSize="50dp" />
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_span="6"
+                android:fontFamily="@font/bungee"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/player_score_label"
+                android:fontFamily="@font/bungee"
+                android:text="@string/puntuacion_jugador"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/player_score"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tie_score_label"
+                android:fontFamily="@font/bungee"
+                android:text="@string/puntuacion_partidas"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/tie_score"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/computer_score_label"
+                android:fontFamily="@font/bungee"
+                android:text="@string/puntuacion_maquina"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/computer_score"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <Button
+                android:id="@+id/restart_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/restart_all"
+                android:fontFamily="@font/bungee"
+                android:onClick="onClick"
+                android:text="@string/restart_all"
+                android:textSize="17dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/lvl_easy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/dificultad_facil"
+                android:fontFamily="@font/bungee"
+                android:onClick="onClick"
+                android:text="@string/dificultad_facil"
+                android:textSize="17dp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/lvl_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/dificultad_media"
+                android:fontFamily="@font/bungee"
+                android:onClick="onClick"
+                android:text="@string/dificultad_media"
+                android:textSize="17dp"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/silenciar_juego"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/sonido_activado"
+                android:onClick="onClick" />
+
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
