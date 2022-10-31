@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">pmdm-t3-01</string>
+    <string name="buscar">Buscar</string>
+    <string name="acerca">Acerca de...</string>
+    <string name="preferencias">preferencias</string>
+    <string name="fondo_rojo">Poner fondo rojo</string>
+</resources>
