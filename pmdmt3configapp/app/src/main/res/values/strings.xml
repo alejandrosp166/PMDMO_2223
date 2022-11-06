@@ -7,7 +7,9 @@
     <string name="save_settings">Guardar configuración</string>
     <string name="load_settings">Recuperar configuración</string>
     <string name="reset_settings">Resetear configuración</string>
-    <string name="campos_vacios">Los campos deben contener información antes de guardarse las preferencias</string>
-    <string name="no_datos_cargar"></string>
-
+    <string name="campos_vacios">Los campos deben contener información</string>
+    <string name="no_datos_cargar">No hay datos para cargar</string>
+    <string name="datos_reseteados">Los datos se han reseteado con éxito</string>
+    <string name="datos_guardados">Los datos se han guardado con éxito</string>
+    <string name="prefs">misPreferencias</string>
 </resources>

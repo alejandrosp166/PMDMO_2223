@@ -42,4 +42,11 @@
         android:ems="10"
         android:id="@+id/campo_password" />
 
+    <TextView
+        android:id="@+id/cambios_Usuario"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="0" />
+
 </LinearLayout>
