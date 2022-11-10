@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,9 +64,13 @@ public class MainActivity extends AppCompatActivity {
         // 2. Obtener el texto e introducirlo en la interfaz
         String cadena = textField.getText().toString();
         if (!cadena.equals("")) {
-            adaptador.add(cadena);
-            adaptador.sort(Comparator.naturalOrder());
-            textField.setText("");
+            if (validarDni(cadena)) {
+                adaptador.add(cadena);
+                adaptador.sort(Comparator.naturalOrder());
+                textField.setText("");
+            } else {
+                Toast.makeText(this, "DNI no válido", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, "Induce un elemento!", Toast.LENGTH_SHORT).show();
         }
@@ -105,31 +110,32 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean validarDni(String dni) {
         char[] letrasDNI = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
-        int numDni;
+        String numDni;
         char letra;
-
-        if(dni.length() == 9) {
-
-            for (int i =0;i<adaptador.getCount();i++) {
-                if(dni.equalsIgnoreCase(adaptador.getItem(i).toString())) {
+        // Se comprueba si tiene el tamaño mínimo
+        if (dni.length() == 9) {
+            // Se comprueba si está dentro de la lista
+            for (int i = 0; i < adaptador.getCount(); i++) {
+                if (dni.equalsIgnoreCase(adaptador.getItem(i).toString())) {
                     return false;
                 }
             }
 
             try {
-                numDni = 0; // los 8 primeros números
-                letra = 'a'; // La última letra (pasar a mayúsculas)
+                // Se guarda el número y la letra en variables diferentes
+                numDni = dni.substring(0,8);
+                letra = dni.substring(8).toUpperCase().charAt(0);
+                // Se le hace el algoritmo necesario para comprobar si funciona
+                for (int i = 0; i < letrasDNI.length; i++) {
+                    if (Integer.valueOf(numDni) % 23 == i && letra == letrasDNI[i]) {
+                        return true;
+                    }
+                }
             } catch (Exception e) {
+                // Excepción que controla Integer.ValueOf() (Por si metemos algo que no sea un número entre los 8 primeros dígitos)
                 return false;
             }
-
-            for (int i = 0; i < letrasDNI.length; i++) {
-                if (numDni % 23 == i && letra == letrasDNI[i]) {
-                    return true;
-                }
-            }
         }
-
         return false;
     }
 }
