@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Build;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.DataInputStream;
@@ -24,11 +27,16 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     private final String LOGTAG = "PMDM";
     private final String FILENAME = "accesos.dat";
+    TableLayout tabla;
+    LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Inicalizamos la tabla y pintamos el encabezado
+        inicializarTabla();
+
         try {
             // Registramos la entrada
             registrarEstado(getString(R.string.entrada));
@@ -47,13 +55,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         try {
             // Registramos la salida
             registrarEstado(getString(R.string.salida));
         } catch (IOException e) {
-            e.printStackTrace();
+            // Controlamos la excepción en un error de flujo
+            Log.e(LOGTAG, "Error E/S");
+        } catch (Exception e) {
+            // Controlamos las excepciones inesperadas
+            Log.e(LOGTAG, "Error general");
         }
     }
 
@@ -69,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         // convertimos en cadena la hora
         String hora = date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
         // Convertimos en cadena la fecha
-        String fecha = date.get(Calendar.DATE) + " / " + date.get(Calendar.MONTH) + " / " + date.get(Calendar.YEAR);
+        String fecha = date.get(Calendar.DATE) + " / " + (date.get(Calendar.MONTH) + 1) + " / " + date.get(Calendar.YEAR);
         // Crear el flujo de escritura
         DataOutputStream write = new DataOutputStream(this.openFileOutput(FILENAME, Context.MODE_APPEND));
         // Añadir al fichero
@@ -81,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @throws IOException
      */
     private void cargarEstados() throws IOException {
@@ -101,25 +112,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Inicializa la tabla, la estructura y pinta el encabezado
+     */
+    private void inicializarTabla() {
+        // Instanciamos el layout
+        layout = this.findViewById(R.id.container);
+        // Intanciamos una tabla
+        tabla = new TableLayout(this);
+        // Separamos las cols
+        tabla.setStretchAllColumns(true);
+        // Añadimos la tabla al layout principal
+        layout.addView(tabla);
+        // Creamos la fila
+        TableRow fila = new TableRow(this);
+        // La centramos
+        fila.setGravity(Gravity.CENTER);
+        // Creamos los elementos del encabezado
+        String[] temp = {"ESTADO", "FECHA", "HORA"};
+
+        for (int i = 0; i < temp.length; i++) {
+            // Creamos la celda
+            TextView celda = new TextView(this);
+            // Personalizamos la celda
+            celda.setPadding(10, 20, 10, 10);
+            celda.setGravity(Gravity.CENTER);
+            celda.setTextColor(Color.WHITE);
+            // Le añadimos el texto
+            celda.setText(temp[i]);
+            //Agregar TextView al contenedor
+            fila.addView(celda);
+        }
+        // Añadimos a la tabla la celda
+        tabla.addView(fila);
+    }
+
+    /**
      * Formatea la salida en una tabla de datos
      *
      * @param cad es la cadena que se compone del estado, la fecha y la hora
      */
     private void mostrarBox(String cad) {
-        // Identificar el contenedor del layout
+        // Separamos la fila por el regex
         String[] temp = cad.split(",");
-        LinearLayout layout = this.findViewById(R.id.container);
-        View box = new View(this);
-
-        for (int i = 0; i < 3; i++) {
+        // Creamos la fila
+        TableRow fila = new TableRow(this);
+        // La centramos
+        fila.setGravity(Gravity.CENTER);
+        for (int i = 0; i < temp.length; i++) {
+            // Creamos la celda
             TextView celda = new TextView(this);
-            // Peronalizar el objeto textView
+            // Personalizamos la celda
             celda.setPadding(10, 20, 10, 10);
             celda.setGravity(Gravity.CENTER);
-            celda.setTextColor(Color.RED);
+
+            if (temp[i].equals("SALIDA")) {
+                celda.setTextColor(Color.RED);
+            } else if (temp[i].equals("ENTRADA")) {
+                celda.setTextColor(Color.GREEN);
+            } else {
+                celda.setTextColor(Color.YELLOW);
+            }
+            // Le añadimos el texto correspondiente
             celda.setText(temp[i]);
-            //Agregar TextView al contenedor
+            // Le ponemos un borde a la fila
+            fila.setBackground(getDrawable(R.drawable.row_border));
+            //Añadimos a la fila la celda
+            fila.addView(celda);
         }
-        layout.addView(box);
+        // Añadimos a la tabla la fila
+        tabla.addView(fila);
     }
 }
