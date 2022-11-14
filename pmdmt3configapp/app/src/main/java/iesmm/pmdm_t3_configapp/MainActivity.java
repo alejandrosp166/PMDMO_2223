@@ -14,16 +14,31 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     // Variable que cuenta el número de veces que se ha cambiado el usuario y la contraseña
-    private int cambiosUsuarios = 0;
+    private int cambiosUsuarios;
     private TextView cambiosUsuarioLabel;
+    // Declaramos los cuadros de texto
+    private EditText textFieldUser;
+    private EditText textFieldPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        try {
+            // Intentamos cargar de primeras las veces que se ha cambiado el usuario y la contraseña
+            SharedPreferences prefs = this.getSharedPreferences(getString(R.string.prefs), Context.MODE_PRIVATE);
+            cambiosUsuarios = Integer.valueOf(prefs.getString("cambiosUsuario", null));
+        } catch (Exception e) {
+            // Si no salta una excepción significa que no hay datos que cargar, por lo que inicializamos la variable contadora a 0
+            cambiosUsuarios = 0;
+        }
+        // Mostramos los datos de las veces que se ha cambiado el usuario y la contraseña
         cambiosUsuarioLabel = findViewById(R.id.cambios_Usuario);
-        cambiosUsuarioLabel.setText(Integer.toString(cambiosUsuarios));
+        cambiosUsuarioLabel.setText(getString(R.string.numero_veces_cambio_usuario) + " " +Integer.toString(cambiosUsuarios) + " veces");
+        // Instanciamos los cuadros de texto
+        textFieldUser = (EditText) findViewById(R.id.campo_email);
+        textFieldPass = (EditText) findViewById(R.id.campo_password);
     }
 
     @Override
@@ -54,21 +69,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Cargar el usuario, contraseña y el número de veces que se ha cambiado de usuario y contraseña del archivo preferencias
+     * Cargar el usuario y contraseña de las preferencias
      */
     private void loadUserAndPass() {
-        // Inicializamos los cuadros de texto
-        EditText textFieldUser = (EditText) findViewById(R.id.campo_email);
-        EditText textFieldPass = (EditText) findViewById(R.id.campo_password);
         // Instanciamos el archivo preferencias
         SharedPreferences prefs = this.getSharedPreferences(getString(R.string.prefs), Context.MODE_PRIVATE);
         // Cargamos los valores guardados del usuario y contraseña
-        String user = prefs.getString("user", null);
-        String pass = prefs.getString("pass", null);
-        // Cargamos el valor que contabiliza las veces que hemos cambiado de usuario y contraseña
-        cambiosUsuarios = Integer.valueOf(prefs.getString("cambiosUsuario", null));
-        // Y lo cambiamos en el textView
-        cambiosUsuarioLabel.setText(Integer.toString(cambiosUsuarios));
+        String user = prefs.getString(getString(R.string.key_user), null);
+        String pass = prefs.getString(getString(R.string.key_pass), null);
 
         if (user != null && pass != null) {
             // Si hay datos que guardar los cargamos en los textField
@@ -81,33 +89,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Guarda el usuario, contraseña y el número de veces que se ha cambiado de usuario y contraseña en el archivo de preferencias
+     * Guarda el usuario, contraseña y el número de veces que se ha cambiado de usuario y contraseña en las preferencias
      */
     private void saveUserAndPass() {
-        // Inicializamos los cuadros de texto
-        EditText textFieldUser = (EditText) findViewById(R.id.campo_email);
-        EditText textFieldPass = (EditText) findViewById(R.id.campo_password);
+
         // Cargamos los datos que hay dentro de los textFields
         String campoUser = textFieldUser.getText().toString();
         String campoPass = textFieldPass.getText().toString();
 
         if (!campoUser.equals("") && !campoPass.equals("")) {
             // Si los dos campos tienen algún contenido que guardar, guardamos los datos
-            // Instanciamos el archivo preferencias
+            // Instanciamos el archivo preferencias y su editor
             SharedPreferences prefs = this.getSharedPreferences(getString(R.string.prefs), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
             // Suma 1 a la variable que contabiliza los cambios de usuarios
             cambiosUsuarios++;
             // Lo muestra por pantalla en un textView
-            cambiosUsuarioLabel.setText(Integer.toString(cambiosUsuarios));
-            SharedPreferences.Editor editor = prefs.edit();
+            cambiosUsuarioLabel.setText(getString(R.string.numero_veces_cambio_usuario) + " " +Integer.toString(cambiosUsuarios) + " veces");
             // guardamos en el archivo de preferencias los datos asociándolo a una key
-            editor.putString("user", campoUser);
-            editor.putString("pass", campoPass);
-            editor.putString("cambiosUsuario", String.valueOf(cambiosUsuarios));
-            // Avisamos al usuario de que se ha realizado con éxito la operación
-            mostrarMensaje(getString(R.string.datos_guardados));
+            editor.putString(getString(R.string.key_user), campoUser);
+            editor.putString(getString(R.string.key_pass), campoPass);
+            editor.putString(getString(R.string.key_cambiosUsuario), String.valueOf(cambiosUsuarios));
             // Guardamos los cambios
             editor.commit();
+            // Avisamos al usuario de que se ha realizado con éxito la operación
+            mostrarMensaje(getString(R.string.datos_guardados));
         } else {
             // Avisamos al usuario de que los campos deben tener datos antes de guardar datos
             mostrarMensaje(getString(R.string.campos_vacios));
@@ -115,24 +121,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Resetea el usuario, contraseña y el número de veces que se ha cambiado de usuario y contraseña que hay guardado en el archivo de preferencias
+     * Resetea el usuario, contraseña y el número de veces que se ha cambiado de usuario y contraseña en las preferencias
      */
     private void resetUserAndPass() {
-        // Instanciamos el archivo preferencias
+        // Instanciamos el archivo preferencias y su editor
         SharedPreferences prefs = this.getSharedPreferences(getString(R.string.prefs), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        // Reiniciamos el valor guardado dentro del archivo de preferencias y lo cambiamos por un valor null
-        editor.putString("user", null);
-        editor.putString("pass", null);
-        editor.putString("cambiosUsuarios", null);
-        // Avisamos al usuario de que se ha realizado con éxito la operación
-        mostrarMensaje(getString(R.string.datos_reseteados));
+        // Limpiamos las preferencias
+        editor.clear();
         // Guardamos los cambios
         editor.commit();
+        // Avisamos al ususario de que se han cambiado los datos con éxito
+        mostrarMensaje(getString(R.string.datos_reseteados));
     }
 
     /**
-     * Muestra mensajes por pantalla
+     * Muestra mensajes por pantalla en un toast
      *
      * @param mensaje que se muestra por pantalla
      */

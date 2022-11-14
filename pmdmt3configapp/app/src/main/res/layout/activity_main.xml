@@ -44,7 +44,7 @@
 
     <TextView
         android:id="@+id/cambios_Usuario"
-        android:layout_width="26dp"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="0" />

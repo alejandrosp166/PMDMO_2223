@@ -1,8 +1,12 @@
 package iesmm.pmdm.pmdm_t3_listview;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.icu.util.Calendar;
+import android.icu.util.GregorianCalendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -17,12 +21,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Locale;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class MainActivity extends AppCompatActivity {
 
+    // FECHAS MAL AL PINTARSE EN EL FICHERO
+
     private ArrayAdapter adaptador;
-    private final String FILE_NAME = "listaFichero.txt";
+    private final String FILE_NAME = "listaFichero";
+    private final String EXTENSION = ".txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +56,27 @@ public class MainActivity extends AppCompatActivity {
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String txt = "Nº de la posición de la lista: " + i + "\n de elementos de lista: " + adaptador.getCount();
-                txt += "\n valor del elemento: " + adaptador.getItem(i).toString();
-                Toast.makeText(getApplicationContext(), txt, Toast.LENGTH_SHORT).show();
+                mostrarCuadroOpciones(i, adaptador.getItem(i).toString());
             }
         });
+    }
+
+    private void mostrarCuadroOpciones(int indice, String dni) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("¡ ATENCIÓN !");
+        builder.setMessage("¿Qué quieres hacer con el DNI: " + dni +" ?").setPositiveButton("Eliminar de la lista", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mostrarToast("Eliminado...");
+                adaptador.remove(adaptador.getItem(indice));
+                adaptador.sort(Comparator.naturalOrder());
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -65,32 +88,32 @@ public class MainActivity extends AppCompatActivity {
         String cadena = textField.getText().toString();
         if (!cadena.equals("")) {
             if (validarDni(cadena)) {
-                adaptador.add(cadena);
-                adaptador.sort(Comparator.naturalOrder());
-                textField.setText("");
+                if(!dniRepetido(cadena)) {
+                    adaptador.add(cadena);
+                    adaptador.sort(Comparator.naturalOrder());
+                    textField.setText("");
+                } else {
+                    mostrarToast(getString(R.string.dni_repetido));
+                }
             } else {
-                Toast.makeText(this, "DNI no válido", Toast.LENGTH_SHORT).show();
+                mostrarToast(getString(R.string.dni_no_valido));
             }
         } else {
-            Toast.makeText(this, "Induce un elemento!", Toast.LENGTH_SHORT).show();
+            mostrarToast(getString(R.string.campo_vacio));
         }
     }
 
-    public void clearItems(View view) {
-        // 1. Volcar el contenido del listView a un fichero de memoria externa
-        escribirFichero();
-        // 2. Vacíar el listView
-        adaptador.clear();
-    }
-
     private void escribirFichero() {
+        Calendar date = new GregorianCalendar();
+        // Convertimos en cadena la fecha
+        String fecha = String.valueOf(date.get(Calendar.DATE)) + "-" + String.valueOf(date.get(Calendar.MONTH) + "-" + String.valueOf(date.get(Calendar.YEAR)));
+
         // 1. Obtener la ruta inicial del directorio del punto de montaje de la memoria externa
         File dir = this.getExternalFilesDir(null);
 
         if (dir.canWrite()) {
-            File f = new File(dir, FILE_NAME);
-            Toast.makeText(this, f.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
+            File f = new File(dir, FILE_NAME + "-" + fecha + EXTENSION);
+            mostrarToast(f.getAbsolutePath());
 
             try {
                 FileWriter fout = new FileWriter(f);
@@ -101,30 +124,39 @@ public class MainActivity extends AppCompatActivity {
 
                 fout.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                mostrarToast(getString(R.string.error_ES));
             }
         } else {
-            Toast.makeText(this, "ERROR E/S", Toast.LENGTH_SHORT).show();
+            mostrarToast(getString(R.string.no_permisos_escritura));
         }
+    }
+
+    public void clearItems(View view) {
+        // 1. Volcar el contenido del listView a un fichero de memoria externa
+        escribirFichero();
+        // 2. Vacíar el listView
+        adaptador.clear();
+    }
+
+    private boolean dniRepetido(String dni) {
+        // Se comprueba si está dentro de la lista
+        for (int i = 0; i < adaptador.getCount(); i++) {
+            if (dni.equalsIgnoreCase(adaptador.getItem(i).toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean validarDni(String dni) {
         char[] letrasDNI = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
-        String numDni;
-        char letra;
         // Se comprueba si tiene el tamaño mínimo
         if (dni.length() == 9) {
-            // Se comprueba si está dentro de la lista
-            for (int i = 0; i < adaptador.getCount(); i++) {
-                if (dni.equalsIgnoreCase(adaptador.getItem(i).toString())) {
-                    return false;
-                }
-            }
 
             try {
                 // Se guarda el número y la letra en variables diferentes
-                numDni = dni.substring(0,8);
-                letra = dni.substring(8).toUpperCase().charAt(0);
+                String numDni = dni.substring(0,8);
+                char letra = dni.substring(8).toUpperCase().charAt(0);
                 // Se le hace el algoritmo necesario para comprobar si funciona
                 for (int i = 0; i < letrasDNI.length; i++) {
                     if (Integer.valueOf(numDni) % 23 == i && letra == letrasDNI[i]) {
@@ -137,5 +169,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void mostrarToast(String mensaje) {
+        Toast.makeText(this, mensaje , Toast.LENGTH_SHORT).show();
     }
 }

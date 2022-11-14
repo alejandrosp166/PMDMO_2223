@@ -9,7 +9,11 @@
     <string name="reset_settings">Resetear configuración</string>
     <string name="campos_vacios">Los campos deben contener información</string>
     <string name="no_datos_cargar">No hay datos para cargar</string>
-    <string name="datos_reseteados">Los datos se han reseteado con éxito</string>
+    <string name="datos_reseteados">Los datos se han reseteado con éxito, la próxima vez que se abra la app no habrá datos que cargar</string>
     <string name="datos_guardados">Los datos se han guardado con éxito</string>
     <string name="prefs">misPreferencias</string>
+    <string name="numero_veces_cambio_usuario">El usuario se ha cambiado un total de:</string>
+    <string name="key_user">user</string>
+    <string name="key_pass">pass</string>
+    <string name="key_cambiosUsuario">cambiosUsuario</string>
 </resources>
