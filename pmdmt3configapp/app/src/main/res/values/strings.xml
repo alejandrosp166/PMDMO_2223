@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ConfigApp</string>
+    <string name="app_name">ConfigApp-ASP</string>
 
     <!-- Acciones del menú -->
     <string name="save_settings">Guardar configuración</string>

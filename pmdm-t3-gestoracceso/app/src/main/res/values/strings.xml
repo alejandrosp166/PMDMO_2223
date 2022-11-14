@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pmdm-t3-gestoracceso</string>
+    <string name="app_name">pmdm-t3-gestoracceso-ASP</string>
     <string name="salida">SALIDA</string>
     <string name="entrada">ENTRADA</string>
 </resources>

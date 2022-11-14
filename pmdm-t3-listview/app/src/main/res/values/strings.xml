@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pmdm-t3-listview</string>
+    <string name="app_name">pmdm-t3-listview-ASP</string>
     <string name="campo_vacio">¡ Debes introducir datos !</string>
     <string name="dni_no_valido">El formato del DNI debe ser 8 números y una letra válida</string>
     <string name="dni_repetido">¡ El DNI está repetido !</string>
