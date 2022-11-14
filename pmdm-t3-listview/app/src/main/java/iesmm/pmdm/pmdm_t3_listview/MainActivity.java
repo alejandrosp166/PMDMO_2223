@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
      * @param elementosListView List de todos los elementos que hay en ese momento dento de la lista
      */
     private void addItemInListView(ArrayList elementosListView) {
-        // 1. Localizar el listView dentro del layout
+        // Localizar el listView dentro del layout
         ListView lista = this.findViewById(R.id.listView1);
-        // 2. Instanciamos el adaptador de datos y vincular los datos que vamos a presentar en el listView
+        // Instanciamos el adaptador de datos y vincular los datos que vamos a presentar en el listView
         adaptador = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, elementosListView);
         lista.setAdapter(adaptador);
 
@@ -137,14 +137,14 @@ public class MainActivity extends AppCompatActivity {
     private void escribirFichero() {
         Calendar date = new GregorianCalendar();
         // Convertimos en cadena la fecha
-        String fecha = String.valueOf(date.get(Calendar.DATE)) + "-" + (String.valueOf(date.get(Calendar.MONTH) + 1) + "-" + String.valueOf(date.get(Calendar.YEAR)));
+        String fecha = date.get(Calendar.DATE) + "-" + date.get(Calendar.MONTH + 1) + "-" + date.get(Calendar.YEAR);
         // Obtener la ruta inicial del directorio del punto de montaje de la memoria externa
         File dir = this.getExternalFilesDir(null);
         // Se comprueba si la app tiene los permisos necesarios
         if (dir.canWrite()) {
 
             File f = new File(dir, FILE_NAME + "-" + fecha + EXTENSION);
-            mostrarToast(f.getAbsolutePath());
+            mostrarToast("El fichero se escribió en: " + f.getAbsolutePath());
 
             try {
                 // Creamos el flujo y ponemos a true la opción de append para concatenar los datos
@@ -171,10 +171,14 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void clearItems(View view) {
-        // Volcar el contenido del listView a un fichero de memoria externa
-        escribirFichero();
-        // Vacíar el listView
-        adaptador.clear();
+        if(adaptador.getCount() > 0) {
+            // Volcar el contenido del listView a un fichero de memoria externa
+            escribirFichero();
+            // Vacíar el listView
+            adaptador.clear();
+        } else {
+            mostrarToast(getString(R.string.no_hay_elementos_guardar));
+        }
     }
 
     /**

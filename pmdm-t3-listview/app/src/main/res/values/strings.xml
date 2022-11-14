@@ -11,4 +11,5 @@
     <string name="eliminando">Eliminando...</string>
     <string name="cancelar">Cancelar</string>
     <string name="cancelando">Cancelando operación...</string>
+    <string name="no_hay_elementos_guardar">¡No hay elementos que guardar!</string>
 </resources>
