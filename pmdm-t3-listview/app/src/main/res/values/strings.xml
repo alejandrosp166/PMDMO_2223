@@ -5,4 +5,10 @@
     <string name="dni_repetido">¡ El DNI está repetido !</string>
     <string name="no_permisos_escritura">La app no dispone de los permisos de escritura de ficheros</string>
     <string name="error_ES">Error en el flujo de datos</string>
+    <string name="no_permisos_lectura">La app no dispone de los permisos de lectura de ficheros</string>
+    <string name="antencion">¡ATENCIÓN!</string>
+    <string name="eliminar_elemento">Eliminar</string>
+    <string name="eliminando">Eliminando...</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="cancelando">Cancelando operación...</string>
 </resources>

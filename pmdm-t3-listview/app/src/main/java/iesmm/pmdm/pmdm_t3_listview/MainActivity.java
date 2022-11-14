@@ -25,32 +25,31 @@ import java.util.Comparator;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MainActivity extends AppCompatActivity {
 
-    // FECHAS MAL AL PINTARSE EN EL FICHERO EL MES ES -1
-
+    // Declaramos el objeto adaptador
     private ArrayAdapter adaptador;
+    // Declaramos el nombre y la ext del fichero
     private final String FILE_NAME = "listaFichero";
     private final String EXTENSION = ".txt";
+    ArrayList cadenas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadData();
-    }
-
-    private void loadData() {
-        // En android no hace falta indicar el tipo de dato
-        // Pueden ser arrays, list, collections...
-        ArrayList cadenas = new ArrayList();
-        // Cargar los datos en el listView
+        cadenas = new ArrayList();
         addItemInListView(cadenas);
     }
 
-    private void addItemInListView(ArrayList cadenas) {
+    /**
+     * Instancia el adaptador, se vincula con la lista y permite interactuar con los elementos del ListView
+     *
+     * @param elementosListView List de todos los elementos que hay en ese momento dento de la lista
+     */
+    private void addItemInListView(ArrayList elementosListView) {
         // 1. Localizar el listView dentro del layout
         ListView lista = this.findViewById(R.id.listView1);
         // 2. Instanciamos el adaptador de datos y vincular los datos que vamos a presentar en el listView
-        adaptador = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cadenas);
+        adaptador = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, elementosListView);
         lista.setAdapter(adaptador);
 
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,74 +60,107 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Muestra el cuadro de opciones al interactuar con el elemento de la lista
+     *
+     * @param indice el índice del elemento que acabamos de seleccionar
+     * @param dni    la cadena del DNI que acabamos de seleccionar
+     */
     private void mostrarCuadroOpciones(int indice, String dni) {
+        // Creamos el objeto alerDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("¡ ATENCIÓN !");
-        builder.setMessage("¿Qué quieres hacer con el DNI: " + dni +" ?").setPositiveButton("Eliminar de la lista", new DialogInterface.OnClickListener() {
+        // Le cambiamos el title
+        builder.setTitle(getString(R.string.antencion));
+        // Le cambiamos el mensaje y creamos el onclickListener para la opción número 1
+        builder.setMessage("¿Qué quieres hacer con el DNI: " + dni + " ?").setPositiveButton(getString(R.string.eliminar_elemento), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mostrarToast("Eliminado...");
+                // Mostramos mensaje al usuario
+                mostrarToast(getString(R.string.eliminando));
+                // Eliminamos el elemento
                 adaptador.remove(adaptador.getItem(indice));
+                // Ordenamos la lista
                 adaptador.sort(Comparator.naturalOrder());
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            // Creamos el onclicklistener para la opción número 2
+        }).setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // Mostramos mensaje al usuario
+                mostrarToast(getString(R.string.cancelando));
+                // Invocamos al método "cancelar"
                 dialogInterface.dismiss();
             }
         }).show();
     }
-    
+
+    /**
+     * Introduce el DNI dentro de la lista
+     *
+     * @param view
+     */
     public void putItem(View view) {
+        // Creamos el cuadro de texto para interactuar con el
+        EditText cuadroTexto = findViewById(R.id.editText);
 
-        EditText textField = findViewById(R.id.editText);
-
-        // 2. Obtener el texto e introducirlo en la interfaz
-        String cadena = textField.getText().toString();
-        if (!cadena.equals("")) {
-            if (validarDni(cadena)) {
-                if(!dniRepetido(cadena)) {
-                    adaptador.add(cadena);
+        // Obtener el texto
+        String dni = cuadroTexto.getText().toString();
+        // Comprobamos si el cuadro de texto está vacío
+        if (!dni.equals("")) {
+            // Comprobamos si es un DNI válido
+            if (validarDni(dni)) {
+                // Comprobamos si el DNI está repetido
+                if (!dniRepetido(dni)) {
+                    // Añadimos el DNI al ListView
+                    adaptador.add(dni);
+                    // Ordenamos los DNI
                     adaptador.sort(Comparator.naturalOrder());
-                    textField.setText("");
+                    // Reiniciamos el valor del cuadro de texto
+                    cuadroTexto.setText("");
                 } else {
+                    // Si está repetido avisamos al usuario
                     mostrarToast(getString(R.string.dni_repetido));
                 }
             } else {
+                // Si el dni no es válido avisamos al usuario
                 mostrarToast(getString(R.string.dni_no_valido));
             }
         } else {
+            // Si el campo está vacío avisamos al usuario
             mostrarToast(getString(R.string.campo_vacio));
         }
     }
 
     /**
-     * Escribe los datos dentro del fichero
+     * Vuelca la lista dentro del fichero
      */
     private void escribirFichero() {
         Calendar date = new GregorianCalendar();
         // Convertimos en cadena la fecha
-        String fecha = String.valueOf(date.get(Calendar.DATE)) + "-" + String.valueOf(date.get(Calendar.MONTH) + "-" + String.valueOf(date.get(Calendar.YEAR)));
-        // 1. Obtener la ruta inicial del directorio del punto de montaje de la memoria externa
+        String fecha = String.valueOf(date.get(Calendar.DATE)) + "-" + (String.valueOf(date.get(Calendar.MONTH) + 1) + "-" + String.valueOf(date.get(Calendar.YEAR)));
+        // Obtener la ruta inicial del directorio del punto de montaje de la memoria externa
         File dir = this.getExternalFilesDir(null);
-
+        // Se comprueba si la app tiene los permisos necesarios
         if (dir.canWrite()) {
-            // Se comprueba si la app tiene los permisos necesarios
+
             File f = new File(dir, FILE_NAME + "-" + fecha + EXTENSION);
             mostrarToast(f.getAbsolutePath());
 
             try {
+                // Creamos el flujo y ponemos a true la opción de append para concatenar los datos
                 FileWriter fout = new FileWriter(f);
-
+                // Escribimos los datos dentro del fichero
                 for (int i = 0; i < adaptador.getCount(); i++) {
-                    fout.write(adaptador.getItem(i).toString() + "\n");
+                    fout.write(adaptador.getItem(i).toString() + ",");
                 }
-
+                // Cerramos el flujo
                 fout.close();
             } catch (IOException e) {
+                // Excepción que controla un error en el flujo de datos
                 mostrarToast(getString(R.string.error_ES));
             }
         } else {
+            // Si la app no tiene los permisos de escritura avisamos al usuario
             mostrarToast(getString(R.string.no_permisos_escritura));
         }
     }
@@ -139,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void clearItems(View view) {
-        // 1. Volcar el contenido del listView a un fichero de memoria externa
+        // Volcar el contenido del listView a un fichero de memoria externa
         escribirFichero();
-        // 2. Vacíar el listView
+        // Vacíar el listView
         adaptador.clear();
     }
 
     /**
-     * Comprueba si el DNI no es válido
+     * Comprueba si el DNI está repetido dentro de la lista
      *
      * @param dni el dni a validar
      * @return true si el DNI está repetido y false si no
@@ -172,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         if (dni.length() == 9) {
             try {
                 // Se guarda el número y la letra en variables diferentes
-                String numDni = dni.substring(0,8);
+                String numDni = dni.substring(0, 8);
                 char letra = dni.substring(8).toUpperCase().charAt(0);
                 // Se le hace el algoritmo necesario para comprobar si funciona
                 for (int i = 0; i < letrasDNI.length; i++) {
@@ -188,7 +220,12 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Muestra un Toast en la pantalla
+     *
+     * @param mensaje cadena que muestra el Toast
+     */
     private void mostrarToast(String mensaje) {
-        Toast.makeText(this, mensaje , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 }
