@@ -25,7 +25,7 @@ import java.util.Comparator;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MainActivity extends AppCompatActivity {
 
-    // FECHAS MAL AL PINTARSE EN EL FICHERO
+    // FECHAS MAL AL PINTARSE EN EL FICHERO EL MES ES -1
 
     private ArrayAdapter adaptador;
     private final String FILE_NAME = "listaFichero";
@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).show();
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    
     public void putItem(View view) {
 
         EditText textField = findViewById(R.id.editText);
@@ -103,15 +102,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Escribe los datos dentro del fichero
+     */
     private void escribirFichero() {
         Calendar date = new GregorianCalendar();
         // Convertimos en cadena la fecha
         String fecha = String.valueOf(date.get(Calendar.DATE)) + "-" + String.valueOf(date.get(Calendar.MONTH) + "-" + String.valueOf(date.get(Calendar.YEAR)));
-
         // 1. Obtener la ruta inicial del directorio del punto de montaje de la memoria externa
         File dir = this.getExternalFilesDir(null);
 
         if (dir.canWrite()) {
+            // Se comprueba si la app tiene los permisos necesarios
             File f = new File(dir, FILE_NAME + "-" + fecha + EXTENSION);
             mostrarToast(f.getAbsolutePath());
 
@@ -131,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Vuelca los datos dentro del fichero y limpia la lista
+     *
+     * @param view
+     */
     public void clearItems(View view) {
         // 1. Volcar el contenido del listView a un fichero de memoria externa
         escribirFichero();
@@ -138,8 +145,13 @@ public class MainActivity extends AppCompatActivity {
         adaptador.clear();
     }
 
+    /**
+     * Comprueba si el DNI no es válido
+     *
+     * @param dni el dni a validar
+     * @return true si el DNI está repetido y false si no
+     */
     private boolean dniRepetido(String dni) {
-        // Se comprueba si está dentro de la lista
         for (int i = 0; i < adaptador.getCount(); i++) {
             if (dni.equalsIgnoreCase(adaptador.getItem(i).toString())) {
                 return true;
@@ -148,11 +160,16 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Comprueba si el DNI es válido o no
+     *
+     * @param dni el dni a validar
+     * @return true si el DNI es válido y flase si el DNI no es válido
+     */
     private boolean validarDni(String dni) {
         char[] letrasDNI = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
-        // Se comprueba si tiene el tamaño mínimo
+        // Se comprueba si tiene el tamaño mínimo para ser válido
         if (dni.length() == 9) {
-
             try {
                 // Se guarda el número y la letra en variables diferentes
                 String numDni = dni.substring(0,8);

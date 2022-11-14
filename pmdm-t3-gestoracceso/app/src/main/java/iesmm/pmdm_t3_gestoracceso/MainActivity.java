@@ -24,47 +24,16 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     private final String LOGTAG = "PMDM";
     private final String FILENAME = "accesos.dat";
-    // Instanciamos el objeto  calendario que nos permite adquirir fechas del sistema
-    private Calendar date = new GregorianCalendar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Registramos la entrada
-        registrarEstado("ENTRADA");
-        // Lo cargamos en la tabla
-        cargarEstados();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Registramos la salida
-        registrarEstado("SALIDA");
-    }
-
-    /**
-     * Guarda el estado que se acaba de realizar puede ser o ENTRADA O SALIDA
-     *
-     * @param estado estado que se acaba de realizar
-     */
-    private void registrarEstado(String estado) {
-
-        // convertimos en cadena la hora
-        String hora = String.valueOf(date.get(Calendar.HOUR_OF_DAY) + ":" + String.valueOf(date.get(Calendar.MINUTE)));
-        // Convertimos en cadena la fecha
-        String fecha = String.valueOf(date.get(Calendar.DATE)) + " / " + String.valueOf(date.get(Calendar.MONTH) + " / " + String.valueOf(date.get(Calendar.YEAR)));
-
         try {
-            // Crear el flujo de escritura
-            DataOutputStream write = new DataOutputStream(this.openFileOutput(FILENAME, Context.MODE_APPEND));
-            // Añadir al fichero
-            write.writeUTF(estado + "," + fecha + "," + hora);
-            // Cerrar el flujo
-            write.close();
-            // Mostramos en el log que se ha registrado una entrada a la app
-            Log.i(LOGTAG, "Se registra la " + estado + " en la FECHA " + fecha + " en la HORA " + hora);
+            // Registramos la entrada
+            registrarEstado(getString(R.string.entrada));
+            // Lo cargamos en la tabla
+            cargarEstados();
         } catch (FileNotFoundException e) {
             // Controlamos la excepción en el caso de que no se encuetre el fichero
             Log.e(LOGTAG, "Fichero no encontrado");
@@ -77,31 +46,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Carga los estados anteriores en el caso de que los haya
-     */
-    private void cargarEstados() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         try {
-            // Creamos el flujo de lectura
-            DataInputStream leer = new DataInputStream(this.openFileInput(FILENAME));
-            // Guardamos la primera línea
-            String l = leer.readUTF();
-            // Recorremos las líneas del fichero mientras esta no sea null
-            while (l != null) {
-                // Lo mostramos en la tabla
-                mostrarBox(l);
-                // Pasamos a la siguiente línea
-                l = leer.readUTF();
-            }
-            // Mostramos en el log que se ha registrado una salida a la app
-            Log.i(LOGTAG, "Los datos se han cargado con éxito en la tabla");
+            // Registramos la salida
+            registrarEstado(getString(R.string.salida));
         } catch (IOException e) {
-            // Controlamos la excepión por si el flujo de lectura falla
-            Log.e(LOGTAG, "Error en el flujo E/S");
-        } catch (Exception e) {
-            // Controlamos las excepciones inesperadas
-            Log.e(LOGTAG, "Error general");
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * Guarda el estado que se acaba de realizar puede ser o ENTRADA O SALIDA
+     *
+     * @param estado estado que se acaba de realizar
+     * @throws IOException
+     */
+    private void registrarEstado(String estado) throws IOException {
+        // Instanciamos el objeto  calendario que nos permite adquirir fechas del sistema
+        Calendar date = new GregorianCalendar();
+        // convertimos en cadena la hora
+        String hora = date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
+        // Convertimos en cadena la fecha
+        String fecha = date.get(Calendar.DATE) + " / " + date.get(Calendar.MONTH) + " / " + date.get(Calendar.YEAR);
+        // Crear el flujo de escritura
+        DataOutputStream write = new DataOutputStream(this.openFileOutput(FILENAME, Context.MODE_APPEND));
+        // Añadir al fichero
+        write.writeUTF(estado + "," + fecha + "," + hora);
+        // Cerrar el flujo
+        write.close();
+        // Mostramos en el log que se ha registrado una entrada a la app
+        Log.i(LOGTAG, "Se registra la " + estado + " en la FECHA " + fecha + " en la HORA " + hora);
+    }
+
+    /**
+     *
+     * @throws IOException
+     */
+    private void cargarEstados() throws IOException {
+        // Creamos el flujo de lectura
+        DataInputStream leer = new DataInputStream(this.openFileInput(FILENAME));
+        // Guardamos la primera línea
+        String l = leer.readUTF();
+        // Recorremos las líneas del fichero mientras esta no sea null
+        while (l != null) {
+            // Lo mostramos en la tabla
+            mostrarBox(l);
+            // Pasamos a la siguiente línea
+            l = leer.readUTF();
+        }
+        // Mostramos en el log que se ha registrado una salida a la app
+        Log.i(LOGTAG, "Los datos se han cargado con éxito en la tabla");
     }
 
     /**
@@ -123,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
             celda.setTextColor(Color.RED);
             celda.setText(temp[i]);
             //Agregar TextView al contenedor
-            
         }
         layout.addView(box);
     }
