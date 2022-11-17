@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pmdm.pmdm_t4_01.MainActivity">
+    <item
+        android:id="@+id/action_navegador_web"
+        android:title="@string/action_navegador_web" />
+    <item
+        android:id="@+id/action_marcador_telefonico"
+        android:title="@string/action_marcador_telefonico" />
+    <item
+        android:id="@+id/action_llamada_numero"
+        android:title="@string/action_llamada_numero" />
+    <item
+        android:id="@+id/action_llamada"
+        android:title="@string/action_llamada" />
+    <item
+        android:id="@+id/action_sms"
+        android:title="@string/action_sms" />
+    <item
+        android:id="@+id/action_sms_compartir"
+        android:title="@string/action_sms_compartir" />
+</menu>
