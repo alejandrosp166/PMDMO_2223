@@ -78,6 +78,12 @@ public class MainActivity extends AppCompatActivity implements GestorApp {
             case R.id.action_llamada:
                 realizarLlamada("123");
                 break;
+            case R.id.action_sms:
+                mandarSMS("Texto prueba");
+                break;
+            case R.id.action_sms_compartir:
+                mandarSMS("Texto prueba", "123");
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -126,12 +132,17 @@ public class MainActivity extends AppCompatActivity implements GestorApp {
 
     @Override
     public void mandarSMS(String contenido) {
-
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.putExtra(Intent.EXTRA_TEXT, contenido);
+        i.setType("text/plain");
+        this.startActivity(i);
     }
 
     @Override
     public void mandarSMS(String contenido, String tlfn) {
-
+        Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + tlfn));
+        i.putExtra("sms_body", contenido);
+        this.startActivity(i);
     }
 
     private boolean confirmarPermisoLlamada() {
@@ -139,8 +150,9 @@ public class MainActivity extends AppCompatActivity implements GestorApp {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             this.requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE}, 0);
-        } else
+        } else {
             confirmado = true;
+        }
 
         return confirmado;
     }
