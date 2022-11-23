@@ -3,6 +3,7 @@ package pmdm.pmdm_t4_agenda;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +14,11 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,15 +28,25 @@ import java.util.Comparator;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter adaptador;
-    ArrayList<String> contactos;
+    ArrayList<String> contactos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        contactos = cargarDatos();
         // CARGAR LOS DATOS
         addItemInListView(contactos);
+
+        try {
+            FileOutputStream f = this.openFileOutput("aa", Context.MODE_PRIVATE);
+            DataOutputStream dos = new DataOutputStream(f);
+            dos.writeUTF("asdasdasdas");
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -46,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Instanciamos el adaptador de datos y vincular los datos que vamos a presentar en el listView
         adaptador = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, elementosListView);
         lista.setAdapter(adaptador);
-
+        cargarDatos();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -80,17 +94,17 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    private ArrayList cargarDatos() {
-        ArrayList<String> lista = new ArrayList();
+    private void cargarDatos() {
         File f = this.getFileStreamPath("contactos.csv");
 
         try {
             if (f.exists()) {
-                BufferedReader leer = new BufferedReader(new FileReader(f));
+                InputStreamReader isr = new InputStreamReader(openFileInput("contactos.csv"));
+                BufferedReader leer = new BufferedReader(isr);
                 String linea = leer.readLine();
 
                 while (linea != null) {
-                    lista.add(linea);
+                    contactos.add(linea);
                     linea = leer.readLine();
                 }
 
@@ -102,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return lista;
     }
 
     /**
