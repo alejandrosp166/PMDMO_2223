@@ -1,10 +1,16 @@
 package pmdm.pmdm_t4_agenda;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +31,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter adaptador;
@@ -34,19 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // CARGAR LOS DATOS
+        contactos.add("601427373");
         addItemInListView(contactos);
-
-        try {
-            FileOutputStream f = this.openFileOutput("aa", Context.MODE_PRIVATE);
-            DataOutputStream dos = new DataOutputStream(f);
-            dos.writeUTF("asdasdasdas");
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -59,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         ListView lista = this.findViewById(R.id.listViewAgenda);
         // Instanciamos el adaptador de datos y vincular los datos que vamos a presentar en el listView
         adaptador = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, elementosListView);
+        // Cambiamos el adaptador del listView
         lista.setAdapter(adaptador);
-        cargarDatos();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -80,10 +76,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        // llamar
+                        // Llamar al contacto NO HACE LO DE CONFIRMAR LA LLAMADA
+                        if (confirmarPermisoLlamada()) {
+                            Intent i = new Intent(Intent.ACTION_CALL);
+                            i.setData(Uri.parse("tel:" + "123"));
+                            startActivity(i);
+                        }
                         break;
                     case 1:
-                        // escribir wasap
+                        // Mandar Wasap
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND, Uri.parse("tel:" + "123"));
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.setType("text/plain");
+                        sendIntent.setPackage("com.whatsapp");
+                        startActivity(sendIntent);
                         break;
                     case 2:
                         // cancelar
@@ -94,18 +100,37 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    private void cargarDatos() {
+    /**
+     *
+     * @return
+     */
+    private boolean confirmarPermisoLlamada() {
+        boolean confirmado = false;
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            this.requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE}, 0);
+        } else {
+            confirmado = true;
+        }
+
+        return confirmado;
+    }
+
+    /**
+     * Carga los datos del listView
+     */
+    private ArrayList cargarDatos() {
+        ArrayList<String> lista = new ArrayList<>();
         File f = this.getFileStreamPath("contactos.csv");
 
         try {
             if (f.exists()) {
-                InputStreamReader isr = new InputStreamReader(openFileInput("contactos.csv"));
-                BufferedReader leer = new BufferedReader(isr);
-                String linea = leer.readLine();
+                DataInputStream leer = new DataInputStream(this.openFileInput("contactos.csv"));
+                String linea = leer.readUTF();
 
                 while (linea != null) {
-                    contactos.add(linea);
-                    linea = leer.readLine();
+                    lista.add(linea);
+                    linea = leer.readUTF();
                 }
 
                 leer.close();
@@ -116,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        return lista;
     }
 
     /**

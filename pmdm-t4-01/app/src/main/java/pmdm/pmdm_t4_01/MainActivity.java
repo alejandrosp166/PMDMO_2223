@@ -110,11 +110,11 @@ public class MainActivity extends AppCompatActivity implements GestorApp {
 
     @Override
     public void marcarLlamada(String tlfn) {
-        if (confirmarPermisoLlamada()) {
-            Intent i = new Intent(Intent.ACTION_DIAL);
-            i.setData(Uri.parse("tel:" + tlfn));
-            this.startActivity(i);
-        }
+
+
+        Intent i = new Intent(Intent.ACTION_DIAL);
+        i.setData(Uri.parse("tel:" + tlfn));
+        this.startActivity(i);
 
         /**
          * OPC 2:
@@ -125,9 +125,13 @@ public class MainActivity extends AppCompatActivity implements GestorApp {
 
     @Override
     public void realizarLlamada(String tlfn) {
-        Intent i = new Intent(Intent.ACTION_CALL);
-        i.setData(Uri.parse("tel:" + tlfn));
-        this.startActivity(i);
+
+        if (confirmarPermisoLlamada()) {
+            Intent i = new Intent(Intent.ACTION_CALL);
+            i.setData(Uri.parse("tel:" + tlfn));
+            this.startActivity(i);
+        }
+
     }
 
     @Override
