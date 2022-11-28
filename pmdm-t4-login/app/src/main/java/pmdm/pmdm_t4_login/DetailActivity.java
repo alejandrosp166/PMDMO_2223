@@ -15,9 +15,8 @@ public class DetailActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
 
         if(bundle != null) {
-            String email = bundle.getString("email");
             TextView textView = this.findViewById(R.id.welcome);
-            textView.setText("Bienvenido\n" + email);
+            textView.setText("Bienvenido " + bundle.getString("nombre") + "\nemail: " + bundle.getString("email") + "\nteléfono: " + bundle.getString("telefono"));
         }
     }
 }
