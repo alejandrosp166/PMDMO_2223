@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/primeraPantalla">
+
+    <fragment
+        android:id="@+id/primeraPantalla"
+        android:name="pmdm.t4.pmdm_t4_alejandroapp.primeraPantalla"
+        android:label="fragment_primera_pantalla"
+        tools:layout="@layout/fragment_primera_pantalla" >
+        <action
+            android:id="@+id/action_primeraPantalla_to_segundaPantalla"
+            app:destination="@id/segundaPantalla" />
+        <action
+            android:id="@+id/action_primeraPantalla_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/segundaPantalla"
+        android:name="pmdm.t4.pmdm_t4_alejandroapp.segundaPantalla"
+        android:label="fragment_segunda_pantalla"
+        tools:layout="@layout/fragment_segunda_pantalla" >
+        <action
+            android:id="@+id/action_segundaPantalla_to_terceraPantalla"
+            app:destination="@id/terceraPantalla" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/terceraPantalla"
+        android:name="pmdm.t4.pmdm_t4_alejandroapp.terceraPantalla"
+        android:label="fragment_tercera_pantalla"
+        tools:layout="@layout/fragment_tercera_pantalla" >
+        <action
+            android:id="@+id/action_terceraPantalla_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/home2"
+        android:name="pmdm.t4.pmdm_t4_alejandroapp.home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>
