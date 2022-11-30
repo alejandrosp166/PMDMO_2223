@@ -3,72 +3,69 @@ package pmdm.pmdm_t4_login;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
-    //https://medium.com/android-beginners/android-snackbar-example-tutorial-a40aae0fc620
+    // Objeto bundle para alamecenar los datos necesarios para la siguiente ventana
     Bundle bundle = new Bundle();
+    // Vista que guarda el objeto View que se pulsa en el evento onclick
+    View vista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Instanciamos el botón
         Button b = this.findViewById(R.id.boton_iniciar_sesion);
-        File dir = this.getExternalFilesDir(null);
-        if (copyFile("\\files\\users.csv", dir.getAbsolutePath())) {
-            mostrarToast("Hemos escrito en el fichero reinicia la app");
-        }
         // Le ponemos un  Listener al botón
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Guardamos el valor de view para los snackbars
+                vista = view;
                 // Guardamos el correos del TextView
                 String correo = ((TextView) findViewById(R.id.input_usuario)).getText().toString();
                 // Guardamos la contraseña del TextView
                 String pass = ((TextView) findViewById(R.id.input_contrasena)).getText().toString();
-
+                // Comprobamos el acceso
                 if (getAcces(correo, pass)) {
+                    // Le pasamos los datos a la siguiente ventana
                     Intent i = new Intent(getApplicationContext(), DetailActivity.class);
                     i.putExtras(bundle);
                     startActivity(i);
-                } else {
-                    // Mostramos un snackbar en caso de error
-                    Snackbar.make(view, "Error de acceso", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     /**
-     * Devuelve cierto si se confirma el email pass son correctos
+     * Devuelve cierto si se confirma que el email pass son correctos, también controla todas
+     * las excepciones posibles en forma de snackbars
      *
-     * @param correo correo del usuario a validar
-     * @param pass contraseña a validar
+     * @param correo correo a validar
+     * @param pass   contraseña a validar
      * @return Devuelve true si los datos están dentro del fichero y false si no
      */
     private boolean getAcces(String correo, String pass) {
+        // Variable que se devuelve
+        boolean valido = false;
         // Guardamos la ruta de la memoria externa
         File dir = this.getExternalFilesDir(null);
         // Se comprueba si la app tiene los permisos necesarios
         if (dir.canRead()) {
-            // Apuntamos al fichero
+            // Creamos un Objeto fichero que apunta al csv
             File f = new File(dir, "users.csv");
             try {
                 // Comprobamos si el fichero existe o no
@@ -86,57 +83,44 @@ public class MainActivity extends AppCompatActivity {
                             bundle.putString("nombre", sep[0]);
                             bundle.putString("email", sep[2]);
                             bundle.putString("telefono", sep[3]);
-                            return true;
+                            valido = true;
                         }
                         linea = leer.readLine();
                     }
                     // Cerramos el flujo
                     leer.close();
+
+                    if (!valido) {
+                        mostrarSnackBar(vista, "Creedenciales incorrectas");
+                    }
+
+                } else {
+                    mostrarSnackBar(vista, "El fichero no existe en la ruta: " + f.getAbsolutePath());
                 }
             } catch (IOException e) {
                 // Controlamos el error en el flujo de lectura
-                mostrarToast("Error de E/S");
-                return false;
+                mostrarSnackBar(vista, "Error de E/S");
             } catch (Exception e) {
                 // Controlamos excepciones inesperadas
-                mostrarToast("Error general");
-                return false;
-            }
-        }
-        return false;
-    }
-
-    public boolean copyFile(String fromFile, String toFile) {
-        File origin = new File(fromFile);
-        File destination = new File(toFile);
-        if (origin.exists()) {
-            try {
-                InputStream in = new FileInputStream(origin);
-                OutputStream out = new FileOutputStream(destination);
-                // We use a buffer for the copy (Usamos un buffer para la copia).
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                in.close();
-                out.close();
-                return true;
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-                return false;
+                mostrarSnackBar(vista, "Error general");
             }
         } else {
-            return false;
+            mostrarSnackBar(vista, "Faltan permisos de lectura");
         }
+        return valido;
     }
 
     /**
-     * Muestra un Toast en la pantalla
+     * Muestra un mensaje por pantalla
      *
-     * @param mensaje cadena que muestra el Toast
+     * @param view    la vista del botón
+     * @param mensaje mensaje que se muestra por pantalla
      */
-    private void mostrarToast(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+
+    private void mostrarSnackBar(View view, String mensaje) {
+        // Mostramos un snackbar en caso de error
+        Snackbar snackbar = Snackbar.make(view, mensaje, Snackbar.LENGTH_LONG);
+        snackbar.setTextColor(Color.RED);
+        snackbar.show();
     }
 }

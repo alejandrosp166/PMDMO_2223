@@ -1,5 +1,7 @@
 package pmdm.pmdm_t4_agenda;
 
+import android.widget.ImageView;
+
 public class Contacto {
     String nombre;
     long numero;
