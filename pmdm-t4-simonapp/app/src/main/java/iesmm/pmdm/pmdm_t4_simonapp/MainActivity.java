@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
-
+// ALEJANDRO SECO PINEDA 2ºDAM
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button buttons[]; // Botones
     private int colors[]; // Colores asociados
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         countScore = this.findViewById(R.id.countScore);
 
-        Button comenzarJuego = this.findViewById(R.id.bCentral);
-        comenzarJuego.setOnClickListener(this);
+        Button btnGo = this.findViewById(R.id.bCentral);
+        btnGo.setOnClickListener(this);
     }
 
     @Override
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private class TareaSimon extends AsyncTask<Void, Integer, Void> {
-        int dificultad = 10;
+        int dificultad = 5;
+
         @Override
         protected void onPreExecute() {
 
@@ -73,27 +74,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected Void doInBackground(Void... voids) {
             int i = 0;
             while (i < dificultad) {
-                int num = (int) (Math.random()*4);
+                int num = (int) (Math.random() * 4);
                 publishProgress(num, 0);
                 SystemClock.sleep(2000);
                 publishProgress(num, -1);
                 i++;
             }
-            publishProgress();
+            publishProgress(0, -2);
             return null;
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
 
-            if(values[1] >= 0) {
+            if (values[1] >= 0) {
                 buttons[values[0]].setBackgroundColor(colors[values[0]]);
-            } else if(values[1] == -1) {
+            } else if (values[1] == -1) {
                 buttons[values[0]].setBackgroundColor(Color.BLACK);
-            } else if (values[0] == -2){
-                countScore.setText(Integer.parseInt(String.valueOf(countScore.getText())) + 1);
+            } else if (values[1] == -2) {
+                int score = Integer.parseInt((String) countScore.getText()) + 1;
+                countScore.setText(String.valueOf(score));
             }
-
         }
 
         @Override
