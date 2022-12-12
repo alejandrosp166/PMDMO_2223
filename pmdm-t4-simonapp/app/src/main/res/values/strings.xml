@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">pmdm-t4-simonapp</string>
+    <string name="level">LEVEL</string>
+    <string name="easy_level">EASY</string>
+    <string name="level_middle">MIDDLE</string>
+    <string name="level_difficult">DIFFICULT</string>
+
+    <string name="score">SCORE</string>
+    <string name="successes">Successes:</string>
+    <string name="failure">Failure:</string>
+</resources>
