@@ -1,17 +1,18 @@
-package iesmm.pmdm.pmdm_t4_listadinamica;
+package pmdm.t4.pmdm_t4_listadinamica;
 
 public class FutbolistaModelo {
-    private String nombre, nacionalidad;
-    private int imgCantante;
+    private String nombre;
+    private String nacionalidad;
+    private int imagen;
 
     public FutbolistaModelo() {
 
     }
 
-    public FutbolistaModelo(String nombre, String nacionalidad, int imgCantante) {
+    public FutbolistaModelo(String nombre, String nacionalidad, int imagen) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
-        this.imgCantante = imgCantante;
+        this.imagen = imagen;
     }
 
     public String getNombre() {
@@ -30,11 +31,11 @@ public class FutbolistaModelo {
         this.nacionalidad = nacionalidad;
     }
 
-    public int getImgCantante() {
-        return imgCantante;
+    public int getImagen() {
+        return imagen;
     }
 
-    public void setImgCantante(int imgCantante) {
-        this.imgCantante = imgCantante;
+    public void setImagen(int imagen) {
+        this.imagen = imagen;
     }
 }

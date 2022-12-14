@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPreExecute() {
-
+            Toast.makeText(getApplicationContext(), "COMIENZA EL JUEGO", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Void unused) {
-
+            Toast.makeText(getApplicationContext(), "FIN DEL JUEGO", Toast.LENGTH_SHORT).show();
         }
     }
 }
