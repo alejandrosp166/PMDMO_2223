@@ -1,4 +1,4 @@
-package iesmm.pmdm.pmdm_t4_listadinamica;
+package pmdm.t4.pmdm_t4_listadinamica;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("iesmm.pmdm.pmdm_t4_listadinamica", appContext.getPackageName());
+        assertEquals("pmdm.t4.pmdm_t4_listadinamica", appContext.getPackageName());
     }
 }

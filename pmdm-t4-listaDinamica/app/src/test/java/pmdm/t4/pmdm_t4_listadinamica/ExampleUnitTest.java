@@ -1,4 +1,4 @@
-package iesmm.pmdm.pmdm_t4_listadinamica;
+package pmdm.t4.pmdm_t4_listadinamica;
 
 import org.junit.Test;
 

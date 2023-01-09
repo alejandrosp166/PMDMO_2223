@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "pmdm-t4-listaDinamica"
+rootProject.name = "pmdm-t4-listadinamica"
 include ':app'
